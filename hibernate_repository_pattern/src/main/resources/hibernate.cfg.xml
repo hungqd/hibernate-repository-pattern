@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		
+		<!-- H2 database -->		 
+        <property name="connection.driver_class">org.h2.Driver</property>
+        <property name="hibernate.connection.url">jdbc:h2:~/test</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.H2Dialect</property> 
+		
+		<property name="hibernate.hbm2ddl.auto">create</property>
+		<!-- 
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+		<property name="hibernate.use_sql_comments">true</property>
+		 -->
+		
+		<!-- Hibernate performance optimization -->
+		<property name="hibernate.default_batch_fetch_size">4</property>
+		<property name="hibernate.order_updates">true</property>
+		<property name="hibernate.jdbc.fetch_size">100</property>		
+		
+		<!-- Hibernate performance statistics log -->
+		<property name="org.jboss.logging.provider">slf4j</property>
+		<property name="hibernate.generate_statistics">true</property>
+		
+		<!-- c3p0 connection pool -->	
+		<property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+		<property name="hibernate.c3p0.min_size">3</property>
+		<property name="hibernate.c3p0.max_size">100</property>
+		<property name="hibernate.c3p0.acquire_increment">2</property>
+		<property name="hibernate.c3p0.max_statements">100</property>
+		<property name="hibernate.c3p0.idle_test_period">300</property>
+		<property name="hibernate.c3p0.timeout">3600</property>
+	    <property name="preferredTestQuery">SELECT 1 FROM person</property>
+	    <property name="testConnectionOnCheckin">true</property>
+	    <property name="testConnectionOnCheckout">false</property>
+	    <property name="idleConnectionTestPeriod">300</property> 
+  	
+  		<!-- mapping entities -->
+  		<mapping class="com.fugu.tim.hibernate_repository_pattern.db.entity.PlayerAccount" />	
+  		<mapping class="com.fugu.tim.hibernate_repository_pattern.db.entity.PlayerInfo" />	
+  	
+	 </session-factory>
+</hibernate-configuration>
