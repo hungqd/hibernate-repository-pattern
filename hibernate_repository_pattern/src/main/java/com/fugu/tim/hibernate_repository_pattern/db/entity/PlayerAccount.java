@@ -1,6 +1,7 @@
 package com.fugu.tim.hibernate_repository_pattern.db.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -27,6 +30,7 @@ public class PlayerAccount implements Persistable {
 	private String username;
 	private int serverId;
 	private Date createDate;
+	private List<Character> characters;
 	
 	private PlayerInfo playerInfo;
 	
@@ -81,6 +85,17 @@ public class PlayerAccount implements Persistable {
 	public void setPlayerInfo(PlayerInfo playerInfo) {
 		this.playerInfo = playerInfo;
 	}
+	
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="playerAccount")
+//	@JoinColumn(name="character_id")
+	public List<Character> getCharacters() {
+		return characters;
+	}
+	
+	public void setCharacters(List<Character> chars) {
+		this.characters = chars;
+	}
+	
 
 	public static PlayerAccount newInstance(final String userName, final String nickName, final int serverId) {
 		final PlayerAccount playerAccount = new PlayerAccount();
@@ -92,8 +107,9 @@ public class PlayerAccount implements Persistable {
 	
 	@Override
 	public String toString() {
-//		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s, %n%s]", getNinId(), getUsername(), getServerId(), getCreateDate(), getPlayerInfo());
 		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s]", getNinId(), getUsername(), getServerId(), getCreateDate());
+//		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s, %n%s]", getNinId(), getUsername(), getServerId(), getCreateDate(), getPlayerInfo());		
+//		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s, %n%s]", getNinId(), getUsername(), getServerId(), getCreateDate(), getCharacters());
 	}
 	
 }

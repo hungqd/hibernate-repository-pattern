@@ -19,7 +19,8 @@
 		<!-- Hibernate performance optimization -->
 		<property name="hibernate.default_batch_fetch_size">4</property>
 		<property name="hibernate.order_updates">true</property>
-		<property name="hibernate.jdbc.fetch_size">100</property>		
+		<property name="hibernate.jdbc.fetch_size">100</property>
+		<!-- <property name="hibernate.id.new_generator_mappings">true</property>  -->	
 		
 		<!-- Hibernate performance statistics log -->
 		<property name="org.jboss.logging.provider">slf4j</property>
@@ -40,7 +41,8 @@
   	
   		<!-- mapping entities -->
   		<mapping class="com.fugu.tim.hibernate_repository_pattern.db.entity.PlayerAccount" />	
-  		<mapping class="com.fugu.tim.hibernate_repository_pattern.db.entity.PlayerInfo" />	
+  		<mapping class="com.fugu.tim.hibernate_repository_pattern.db.entity.PlayerInfo" />
+  		<mapping class="com.fugu.tim.hibernate_repository_pattern.db.entity.Character" />		
   	
 	 </session-factory>
 </hibernate-configuration>
