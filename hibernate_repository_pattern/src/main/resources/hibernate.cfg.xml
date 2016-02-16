@@ -39,12 +39,12 @@
 	    <property name="idleConnectionTestPeriod">300</property> 
   	
   		<!-- mapping entities -->
-  		<mapping class="com.fugu.tim.hibernate_repository_pattern.db.entity.PlayerAccount" />	
-  		<mapping class="com.fugu.tim.hibernate_repository_pattern.db.entity.PlayerInfo" />
-  		<mapping class="com.fugu.tim.hibernate_repository_pattern.db.entity.Character" />
-  		<mapping class="com.fugu.tim.hibernate_repository_pattern.db.entity.Skill" />
-  		<mapping class="com.fugu.tim.hibernate_repository_pattern.db.entity.Item" />
-  		<mapping class="com.fugu.tim.hibernate_repository_pattern.db.entity.Quest" />
+  		<mapping class="com.fugu.database.entity.PlayerAccount" />	
+  		<mapping class="com.fugu.database.entity.PlayerInfo" />
+  		<mapping class="com.fugu.database.entity.Character" />
+  		<mapping class="com.fugu.database.entity.Skill" />
+  		<mapping class="com.fugu.database.entity.Item" />
+  		<mapping class="com.fugu.database.entity.Quest" />
   	
 	 </session-factory>
 </hibernate-configuration>

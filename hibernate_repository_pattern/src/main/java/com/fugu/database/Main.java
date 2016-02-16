@@ -3,9 +3,7 @@ package com.fugu.database;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.fugu.database.entity.Character;
 import com.fugu.database.entity.Item;
@@ -15,8 +13,6 @@ import com.fugu.database.entity.Quest;
 import com.fugu.database.entity.Skill;
 import com.fugu.database.page.Page;
 import com.fugu.database.page.PageRequest;
-import com.fugu.database.repository.CharacterRepository;
-import com.fugu.database.repository.ItemRepository;
 import com.fugu.database.repository.PlayerAccountRepository;
 import com.fugu.database.sort.Sort;
 import com.fugu.database.sort.Sort.Direction;
