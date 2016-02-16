@@ -10,12 +10,15 @@ import java.util.Set;
 import com.fugu.tim.hibernate_repository_pattern.db.HibernateUtil;
 import com.fugu.tim.hibernate_repository_pattern.db.Persistable;
 import com.fugu.tim.hibernate_repository_pattern.db.entity.Character;
+import com.fugu.tim.hibernate_repository_pattern.db.entity.Item;
 import com.fugu.tim.hibernate_repository_pattern.db.entity.PlayerAccount;
 import com.fugu.tim.hibernate_repository_pattern.db.entity.PlayerInfo;
+import com.fugu.tim.hibernate_repository_pattern.db.entity.Quest;
 import com.fugu.tim.hibernate_repository_pattern.db.entity.Skill;
 import com.fugu.tim.hibernate_repository_pattern.db.page.Page;
 import com.fugu.tim.hibernate_repository_pattern.db.page.PageRequest;
 import com.fugu.tim.hibernate_repository_pattern.db.repository.CharacterRepository;
+import com.fugu.tim.hibernate_repository_pattern.db.repository.ItemRepository;
 import com.fugu.tim.hibernate_repository_pattern.db.repository.PlayerAccountRepository;
 import com.fugu.tim.hibernate_repository_pattern.db.sort.Sort;
 import com.fugu.tim.hibernate_repository_pattern.db.sort.Sort.Direction;
@@ -42,6 +45,7 @@ public class Main {
 		
 		PlayerAccountRepository repo = new PlayerAccountRepository();
 		
+		// 建立帳號
 		PlayerAccount ac = new PlayerAccount();
 		ac.setUsername("Tim");
 		ac.setServerId(1);
@@ -49,42 +53,82 @@ public class Main {
 		
 		PlayerInfo info = PlayerInfo.newInstance();
 		
+		// 建立角色
 		Character c1 = new Character();
 		c1.setName("c1");
-		c1.setPlayerAccount(ac);
 		Character c2 = new Character();
 		c2.setName("c2");
-		c2.setPlayerAccount(ac);
-		
-		Skill fireExplosion = new Skill();
-		fireExplosion.setName("magic");
-		Skill sonicSlash = new Skill();
-		sonicSlash.setName("Sonic Slash");
-		
-		List<Skill> skills = new ArrayList<>();
-		skills.add(fireExplosion);
-		skills.add(sonicSlash);
-		
-		c1.setSkills(skills);
-		c2.setSkills(skills);
-		
 		List<Character> chars = new ArrayList<>();
 		chars.add(c1);
 		chars.add(c2);
 		
+		// 建立技能
+		Skill fireExplosion = new Skill();
+		fireExplosion.setName("magic");
+		Skill sonicSlash = new Skill();
+		sonicSlash.setName("Sonic Slash");		
+		List<Skill> skills = new ArrayList<>();
+		skills.add(fireExplosion);
+		skills.add(sonicSlash);
+		
+		// 建立物品
+		Item healingPotion = new Item();
+		healingPotion.setName("Healing Potion");
+		Item antidote = new Item();
+		antidote.setName("Antidote");
+		List<Item> items = new ArrayList<>();
+		items.add(healingPotion);
+		items.add(antidote);
+		
+		// 建立任務
+		Quest wonFirstBattle = new Quest();
+		wonFirstBattle.setName("Won the first battle");
+		Quest boughtFirstItem = new Quest();
+		boughtFirstItem.setName("Bought the first item");
+		List<Quest> quests = new ArrayList<>();
+		quests.add(wonFirstBattle);
+		quests.add(boughtFirstItem);		
+		
+		// 建立角色與技能關聯
+		c1.setSkills(skills);
+		c2.setSkills(skills);		
+		// 建立技能與角色關聯		
 		fireExplosion.setCharacters(chars);
 		sonicSlash.setCharacters(chars);
 		
+		// 建立帳號與info關聯
 		ac.setPlayerInfo(info);
-		ac.setCharacters(chars);
-		
+		// 建立info與帳號關聯
 		info.setPlayerAccount(ac);
+		
+		// 建立帳號與角色關聯
+		ac.setCharacters(chars);
+		// 建立角色與帳號關聯
+		c2.setPlayerAccount(ac);
+		c1.setPlayerAccount(ac);
+				
+		// 建立帳號與物品關聯
+		ac.setItems(items);
+		
+		// 建立帳號與任務關聯
+		ac.setQuests(quests);
 		
 		repo.save(ac);
 		
 		
 //		List<PlayerAccount> accounts = repo.findAll();
 //		show(accounts);
+		
+		
+		/*
+		 * PlayerAccount 對 Item 單向一對多關聯測試
+		 * PlayerAccount 對 Quest 單向多對多關聯測試 
+		 * 使用 JoinTable
+		 */
+		List<PlayerAccount> allAccounts = repo.findAll();
+		show(allAccounts);
+		
+		
 		
 		/*
 		 * 雙向一對多 多對一關聯測試 
@@ -98,9 +142,9 @@ public class Main {
 //		show(playerAccounts);
 		
 		// 測試 Character 對 PlayerAccount 雙向多對一
-		CharacterRepository characterRepo = new CharacterRepository();
-		List<Character> characters = characterRepo.findAll();
-		show(characters);		
+//		CharacterRepository characterRepo = new CharacterRepository();
+//		List<Character> characters = characterRepo.findAll();
+//		show(characters);		
 		
 		/*
 		 * 雙向多對多關聯測試

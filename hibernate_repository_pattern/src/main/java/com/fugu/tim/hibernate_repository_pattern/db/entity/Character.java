@@ -55,7 +55,7 @@ public class Character implements Persistable {
 		this.name = name;
 	}
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="nin_id")
 	public PlayerAccount getPlayerAccount() {
 		return playerAccount;
@@ -76,8 +76,9 @@ public class Character implements Persistable {
 	
 	@Override
 	public String toString() {
-//		return String.format("Character [characterId=%d, name=%s]", getId(), getName());
-		return String.format("Character [characterId=%d, name=%s] %n%s", getId(), getName(), getPlayerAccount());
+		return String.format("Character [characterId=%d, name=%s]", getId(), getName());
+//		return String.format("Character [characterId=%d, name=%s] %n%s %n%s", getId(), getName(), getSkills());
+//		return String.format("Character [characterId=%d, name=%s] %n%s", getId(), getName(), getPlayerAccount());
 //		return String.format("Character [characterId=%d, name=%s] %n%s %n%s", getId(), getName(), getPlayerAccount(), getSkills());
 	}
 

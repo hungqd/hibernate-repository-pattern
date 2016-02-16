@@ -9,22 +9,22 @@ import javax.persistence.Table;
 import com.fugu.tim.hibernate_repository_pattern.db.Persistable;
 
 /**
- * Item Entity
+ * Quest Entity
  * 
- * @see com.fugu.tim.hibernate_repository_pattern.db.entity.Character#getItems()
+ * @see com.fugu.tim.hibernate_repository_pattern.db.entity.PlayerAccount#getQuests()
  */
 @Entity
-@Table(name="item")
-public class Item implements Persistable {
+@Table(name="quest")
+public class Quest implements Persistable {
 	
-	private static final long serialVersionUID = 3660674673121716460L;
+	private static final long serialVersionUID = 8585803200953386093L;
 	
 	private int id;
 	private String name;
 	
 	@Id
 	@GeneratedValue
-	@Column(name="Item_id")
+	@Column(name="quest_id")
 	public int getId() {
 		return id;
 	}
@@ -43,7 +43,7 @@ public class Item implements Persistable {
 	
 	@Override
 	public String toString() {
-		return String.format("Item [ItemId=%d, name=%s]", getId(), getName());
+		return String.format("Quest [QuestId=%d, name=%s]", getId(), getName());
 		
 	}
 

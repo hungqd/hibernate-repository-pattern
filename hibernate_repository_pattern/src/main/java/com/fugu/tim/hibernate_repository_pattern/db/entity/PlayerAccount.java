@@ -10,6 +10,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -24,6 +27,7 @@ import com.fugu.tim.hibernate_repository_pattern.db.Persistable;
  * 
  * 對 PlayerInfo 為雙向一對一關聯
  * 對 Character 為雙向一對多關聯
+ * 對 Item 為單向一對多關聯
  * 
  */
 @Entity
@@ -39,9 +43,11 @@ public class PlayerAccount implements Persistable {
 	
 	private PlayerInfo playerInfo;
 	private List<Character> characters;
+	private List<Item> items;
+	private List<Quest> quests;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	@Column(name = "nin_id")
 	public int getNinId() {
 		return ninId;
@@ -103,7 +109,35 @@ public class PlayerAccount implements Persistable {
 		this.characters = chars;
 	}
 	
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinTable(name="player_account_item", 
+		joinColumns=@JoinColumn(name="nin_id"), 
+		inverseJoinColumns=@JoinColumn(name="item_id")
+	)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	public List<Item> getItems() {
+		return items;
+	}
 
+	public void setItems(List<Item> items) {
+		this.items = items;
+	}
+	
+	// Entity 有一個以上 FetchType.EAGER 因此使用 @LazyCollection
+	@ManyToMany(cascade=CascadeType.ALL)
+	@JoinTable(name="player_account_quest",
+		joinColumns=@JoinColumn(name="nin_id"),
+		inverseJoinColumns=@JoinColumn(name="quest_id")
+	)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	public List<Quest> getQuests() {
+		return quests;
+	}
+
+	public void setQuests(List<Quest> quests) {
+		this.quests = quests;
+	}
+	
 	public static PlayerAccount newInstance(final String userName, final String nickName, final int serverId) {
 		final PlayerAccount playerAccount = new PlayerAccount();
 		playerAccount.setUsername(userName);
@@ -115,8 +149,8 @@ public class PlayerAccount implements Persistable {
 	@Override
 	public String toString() {
 //		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s]", getNinId(), getUsername(), getServerId(), getCreateDate());
-		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s, %n%s]", getNinId(), getUsername(), getServerId(), getCreateDate(), getPlayerInfo());		
-//		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s, %n%s, %n%s]", getNinId(), getUsername(), getServerId(), getCreateDate(), getPlayerInfo(), getCharacters());
+//		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s, %n%s]", getNinId(), getUsername(), getServerId(), getCreateDate(), getPlayerInfo());		
+		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s, %n%s, %n%s, %n%s, %n%s]", getNinId(), getUsername(), getServerId(), getCreateDate(), getPlayerInfo(), getCharacters(), getItems(), getQuests());
 	}
-	
+
 }
