@@ -15,14 +15,14 @@ import javax.persistence.Table;
 import com.fugu.tim.hibernate_repository_pattern.db.Persistable;
 
 /**
- * Skill Entity
+ * Item Entity
  * 
- * 對 Character 為多對多關係
+ * 對 PlayerAccount 為多對多關係 但是沒有單向關係
  * 
- * @see com.fugu.tim.hibernate_repository_pattern.db.entity.Character#getSkills()
+ * @see com.fugu.tim.hibernate_repository_pattern.db.entity.Character#getItems()
  */
 @Entity
-@Table(name="skill")
+@Table(name="Item")
 public class Item implements Persistable {
 
 	private static final long serialVersionUID = 2366979573759613156L;
@@ -33,7 +33,7 @@ public class Item implements Persistable {
 	
 	@Id
 	@GeneratedValue
-	@Column(name="skill_id")
+	@Column(name="Item_id")
 	public int getId() {
 		return id;
 	}
@@ -52,8 +52,8 @@ public class Item implements Persistable {
 	
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(
-            name="character_skill",
-            joinColumns = @JoinColumn( name="skill_id"),
+            name="character_Item",
+            joinColumns = @JoinColumn( name="Item_id"),
             inverseJoinColumns = @JoinColumn( name="character_id")
     )
 	public List<Character> getCharacters() {
@@ -66,8 +66,8 @@ public class Item implements Persistable {
 	
 	@Override
 	public String toString() {
-//		return String.format("Skill [skillId=%d, name=%s]", getId(), getName());
-		return String.format("Skill [skillId=%d, name=%s] %n%s", getId(), getName(), getCharacters());
+//		return String.format("Item [ItemId=%d, name=%s]", getId(), getName());
+		return String.format("Item [ItemId=%d, name=%s] %n%s", getId(), getName(), getCharacters());
 		
 	}
 
