@@ -3,13 +3,16 @@ package com.fugu.tim.hibernate_repository_pattern;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fugu.tim.hibernate_repository_pattern.db.HibernateUtil;
 import com.fugu.tim.hibernate_repository_pattern.db.Persistable;
 import com.fugu.tim.hibernate_repository_pattern.db.entity.Character;
 import com.fugu.tim.hibernate_repository_pattern.db.entity.PlayerAccount;
 import com.fugu.tim.hibernate_repository_pattern.db.entity.PlayerInfo;
+import com.fugu.tim.hibernate_repository_pattern.db.entity.Skill;
 import com.fugu.tim.hibernate_repository_pattern.db.page.Page;
 import com.fugu.tim.hibernate_repository_pattern.db.page.PageRequest;
 import com.fugu.tim.hibernate_repository_pattern.db.repository.CharacterRepository;
@@ -53,9 +56,24 @@ public class Main {
 		c2.setName("c2");
 		c2.setPlayerAccount(ac);
 		
+		Skill fireExplosion = new Skill();
+		fireExplosion.setName("magic");
+		Skill sonicSlash = new Skill();
+		sonicSlash.setName("Sonic Slash");
+		
+		List<Skill> skills = new ArrayList<>();
+		skills.add(fireExplosion);
+		skills.add(sonicSlash);
+		
+		c1.setSkills(skills);
+		c2.setSkills(skills);
+		
 		List<Character> chars = new ArrayList<>();
 		chars.add(c1);
 		chars.add(c2);
+		
+		fireExplosion.setCharacters(chars);
+		sonicSlash.setCharacters(chars);
 		
 		ac.setPlayerInfo(info);
 		ac.setCharacters(chars);
@@ -64,12 +82,39 @@ public class Main {
 		
 		repo.save(ac);
 		
-//		List<PlayerAccount> accounts = repo.findAll();
-//		show(accounts);		
 		
-		CharacterRepository charRepo = new CharacterRepository();
-		List<Character> allChars = charRepo.findAll();
-		show(allChars);
+//		List<PlayerAccount> accounts = repo.findAll();
+//		show(accounts);
+		
+		/*
+		 * 雙向一對多 多對一關聯測試 
+		 * 使用 JoinColumn
+		 * Owning side 為 Character
+		 */
+
+		// 測試 PlayerAccount 對 Character 雙向一對多
+//		PlayerAccountRepository playerAccountRepo = new PlayerAccountRepository();
+//		Set<PlayerAccount> playerAccounts = new HashSet<>(repo.findAll());
+//		show(playerAccounts);
+		
+		// 測試 Character 對 PlayerAccount 雙向多對一
+		CharacterRepository characterRepo = new CharacterRepository();
+		List<Character> characters = characterRepo.findAll();
+		show(characters);		
+		
+		/*
+		 * 雙向多對多關聯測試
+		 */
+		
+		// 測試 character 對 skill 雙向多對多關聯
+//		CharacterRepository charRepo = new CharacterRepository();
+//		List<Character> allChars = charRepo.findAll();
+//		show(allChars);
+
+		// 測試 skill 對 character 雙向多對多關聯
+//		SkillRepository skillRepo = new SkillRepository();
+//		List<Skill> allSkills = skillRepo.findAll();
+//		show(allSkills);
 		
 		
 		// 關閉 Session Factory

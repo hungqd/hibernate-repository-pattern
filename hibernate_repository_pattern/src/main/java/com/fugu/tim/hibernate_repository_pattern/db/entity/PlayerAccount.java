@@ -10,15 +10,21 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import com.fugu.tim.hibernate_repository_pattern.db.Persistable;
 
 /**
  * PlayerAccount Entity
+ * 
+ * 對 PlayerInfo 為雙向一對一關聯
+ * 對 Character 為雙向一對多關聯
+ * 
  */
 @Entity
 @Table(name = "player_account")
@@ -30,9 +36,9 @@ public class PlayerAccount implements Persistable {
 	private String username;
 	private int serverId;
 	private Date createDate;
-	private List<Character> characters;
 	
 	private PlayerInfo playerInfo;
+	private List<Character> characters;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -86,8 +92,9 @@ public class PlayerAccount implements Persistable {
 		this.playerInfo = playerInfo;
 	}
 	
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="playerAccount")
-//	@JoinColumn(name="character_id")
+	// Entity 有一個以上 FetchType.EAGER 因此使用 @LazyCollection
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="playerAccount")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	public List<Character> getCharacters() {
 		return characters;
 	}
@@ -107,9 +114,9 @@ public class PlayerAccount implements Persistable {
 	
 	@Override
 	public String toString() {
-		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s]", getNinId(), getUsername(), getServerId(), getCreateDate());
-//		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s, %n%s]", getNinId(), getUsername(), getServerId(), getCreateDate(), getPlayerInfo());		
-//		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s, %n%s]", getNinId(), getUsername(), getServerId(), getCreateDate(), getCharacters());
+//		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s]", getNinId(), getUsername(), getServerId(), getCreateDate());
+		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s, %n%s]", getNinId(), getUsername(), getServerId(), getCreateDate(), getPlayerInfo());		
+//		return String.format("Player Account [Ninid=%d, username=%s, ServerId=%d, Createdate=%s, %n%s, %n%s]", getNinId(), getUsername(), getServerId(), getCreateDate(), getPlayerInfo(), getCharacters());
 	}
 	
 }

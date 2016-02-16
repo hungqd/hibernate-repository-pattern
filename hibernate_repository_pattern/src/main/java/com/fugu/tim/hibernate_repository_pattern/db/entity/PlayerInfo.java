@@ -15,6 +15,8 @@ import com.fugu.tim.hibernate_repository_pattern.db.Persistable;
 
 /**
  * PlayerInfo Entity
+ * 
+ * 對 Player Account 為多對一關係
  */
 @Entity
 @Table(name = "player_info")
