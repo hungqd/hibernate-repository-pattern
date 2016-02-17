@@ -9,7 +9,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.fugu.database.HibernateUtil;
 import com.fugu.database.page.Page;
@@ -28,19 +27,15 @@ import com.fugu.database.utility.Util;
  * @see org.springframework.data.jpa.repository.JpaRepository
  * @see org.springframework.data.domain.Sort.Direction.PageRequest
  */
-public abstract class AbstractRepository<T, ID extends Serializable> {
+public abstract class AbstractRepository<T, ID extends Serializable> implements Repository<T, ID> {
 	
 	/**
-	 * 強制子類別傳回 Entity Class 以建立 Criteria 進行 Query 操作
-	 * 
-	 * @return	Class of Repository's Entity
+	 * {@inheritDoc}}
 	 */
 	public abstract Class<T> getDomainClass();
 	
 	/**
-	 * 開啟 Hibernate Session
-	 * 
-	 * @return	Session
+	 * {@inheritDoc}}
 	 */
 	public Session openSession() {		
 		Session session = HibernateUtil.getSessionFactory().openSession(); 
@@ -48,9 +43,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 	
 	/**
-	 * 使用 Primary Key 刪除該筆資料
-	 * 
-	 * @param id 必須大於0
+	 * {@inheritDoc}}
 	 */
 	public void delete(ID id) throws RuntimeException {
 	
@@ -62,9 +55,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 	
 	/**
-	 * 使用 Entity 作為參數刪除該筆資料
-	 * 
-	 * @param entity
+	 * {@inheritDoc}}
 	 */
 	public void delete(T entity) {
 		
@@ -88,9 +79,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 
 
 	/**
-	 * 使用 Iterable<Entity> 作為參數刪除多筆資料
-	 * 
-	 * @param entities
+	 * {@inheritDoc}}
 	 */
 	public void delete(Iterable<? extends T> entities) {
 		
@@ -116,10 +105,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 	
 	/**
-	 * 使用 Primary Key 作為參數取得該筆資料
-	 * 
-	 * @param id
-	 * @return T Object
+	 * {@inheritDoc}}
 	 */
 	@SuppressWarnings("unchecked")
 	public T findOne(ID id) {
@@ -145,10 +131,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 
 	/**
-	 * 使用 Primary Key 作為參數檢查該筆資料是否存在
-	 * 
-	 * @param id
-	 * @return 資料存在返回 true 反之 false
+	 * {@inheritDoc}}
 	 */
 	public boolean exists(ID id) {
 
@@ -156,10 +139,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 	
 	/**
-	 * 使用 Specification 作為參數取得單筆資料
-	 * 
-	 * @param spec
-	 * @return T
+	 * {@inheritDoc}}
 	 */
 	@SuppressWarnings("unchecked")
 	public T findOne(Specifiable spec) {
@@ -186,9 +166,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 	
 	/**
-	 * 取得所有資料
-	 * 
-	 * @return List<T> entities 失敗則返回 null
+	 * {@inheritDoc}}
 	 */
 	@SuppressWarnings("unchecked")
 	public List<T> findAll() {		
@@ -212,10 +190,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 	
 	/**
-	 * 使用 Sort 作為參數取得符合條件的多筆資料
-	 * 
-	 * @param sort
-	 * @return List<T> entities 失敗則返回 null
+	 * {@inheritDoc}}
 	 */
 	@SuppressWarnings("unchecked")
 	public List<T> findAll(Sort sort) {	
@@ -241,10 +216,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 	
 	/**
-	 * 使用 Specification 作為參數取得符合條件的多筆資料
-	 * 
-	 * @param sort
-	 * @return List<T> entities 失敗則返回 null
+	 * {@inheritDoc}}
 	 */
 	@SuppressWarnings("unchecked")
 	public List<T> findAll(Specifiable spec) {		
@@ -269,10 +241,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 	
 	/**
-	 * 使用 Specification 與 Sort 作為參數取得符合條件的多筆資料
-	 * 
-	 * @param sort
-	 * @return List<T> entities 失敗則返回 null
+	 * {@inheritDoc}}
 	 */
 	@SuppressWarnings("unchecked")
 	public List<T> findAll(Specifiable spec, Sort sort) {
@@ -298,39 +267,33 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 	
 	/**
-	 * 使用 PageRequest 作為參數取得符合條件的多筆資料
-	 * 
-	 * @param sort
-	 * @return List<T> entities 失敗則返回 null
+	 * {@inheritDoc}}
 	 */
-	public Page<T> findAll(Pageable pageable) {
+	public Page<T> findAll(Pageable pageRequest) {
 		
-		return findAll(null, pageable);
+		return findAll(null, pageRequest);
 	}
 	
 	/**
-	 * 使用 PageRequest 與 Sort 作為參數取得符合條件的多筆資料
-	 * 
-	 * @param sort
-	 * @return List<T> entities 失敗則返回 null
+	 * {@inheritDoc}}
 	 */
 	@SuppressWarnings("unchecked")
-	public Page<T> findAll(Specifiable spec, Pageable pageable) {
+	public Page<T> findAll(Specifiable spec, Pageable pageRequest) {
 		
-		Assert.notNull(pageable);
+		Assert.notNull(pageRequest);
 		
 		Session session = openSession();
 		
 		Class<T> classType = getDomainClass();		
 		Criteria criteria = session.createCriteria(classType);
 		
-		criteria = buildCriteria(criteria, spec, pageable, null);
+		criteria = buildCriteria(criteria, spec, pageRequest, null);
 		
 		try {
 			long total = count(spec);
 			List<T> content = criteria.list();
 			
-			Page<T> page = new PageImpl<T>(content, pageable, total);			
+			Page<T> page = new PageImpl<T>(content, pageRequest, total);			
 			return page;
 		} catch (HibernateException he) {
 			Util.logException(he);
@@ -342,10 +305,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 	
 	/**
-	 * 取得所有資料的筆數
-	 * 
-	 * @param sort
-	 * @return long 失敗則返回 0
+	 * {@inheritDoc}}
 	 */
 	public long count() {
 		
@@ -353,10 +313,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 	
 	/**
-	 * 使用 Specification 作為參數取得符合條件的筆數
-	 * 
-	 * @param sort
-	 * @return long 失敗則返回 0
+	 * {@inheritDoc}}
 	 */
 	public long count(Specifiable spec) {
 		
@@ -383,10 +340,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 
 	
 	/**
-	 * 保存或更新 transient 或是 detached 狀態的 Entity
-	 * 
-	 * @param entity
-	 * @return <S extends T> S 操作失敗返回 null
+	 * {@inheritDoc}}
 	 */
 	public <S extends T> S save(S entity) {
 		
@@ -411,12 +365,8 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 	
 	/**
-	 * 保存或更新 transient 或是 detached 狀態的 Entities
-	 * 
-	 * @param entities
-	 * @return <S extends T> List<S> 操作失敗返回 null
+	 * {@inheritDoc}}
 	 */
-	@Transactional
 	public <S extends T> List<S> save(Iterable<S> entities) {
 		
 		Assert.notNull(entities);
@@ -449,13 +399,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
 	}
 	
 	/**
-	 * 使用實現 Criterial 介面的類別更新 Criteria
-	 * 
-	 * @param criteria
-	 * @param spec
-	 * @param page
-	 * @param sort
-	 * @return Criteria
+	 * {@inheritDoc}}
 	 */
 	private Criteria buildCriteria(Criteria criteria, Specifiable spec, Pageable page, Sort sort) {
 		

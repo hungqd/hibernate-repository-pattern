@@ -19,7 +19,7 @@ public class PageImpl<T> implements Page<T>, Serializable {
 	
 	private final long total;
 	private final List<T> content = new ArrayList<T>();
-	private final Pageable pageable;
+	private final Pageable pageRequest;
 
 	/**
 	 * 使用與參數 {@link List} {@link Pageable} 與 {@link PageImpl} 建立資料來源為 {@link List} 的 {@link Page}
@@ -38,12 +38,12 @@ public class PageImpl<T> implements Page<T>, Serializable {
 	 * @param pageable 可以是 {@literal null}
 	 * @param total 總資料筆數 可以是 {@literal null} 當 total 為 null 時使用 offset 與 content.size() 計算總資料筆數 
 	 */
-	public PageImpl(List<T> content, Pageable pageable, long total) {
+	public PageImpl(List<T> content, Pageable pageRequest, long total) {
 
 		this.content.addAll(content);
-		this.pageable = pageable;
-		this.total = !content.isEmpty() && pageable != null && pageable.getOffset() + pageable.getPageSize() > total
-				? pageable.getOffset() + content.size() : total;
+		this.pageRequest = pageRequest;
+		this.total = !content.isEmpty() && pageRequest != null && pageRequest.getOffset() + pageRequest.getPageSize() > total
+				? pageRequest.getOffset() + content.size() : total;
 	}
 
 	/**
@@ -59,14 +59,14 @@ public class PageImpl<T> implements Page<T>, Serializable {
 	 * {@inheritDoc}}
 	 */
 	public int getNumber() {
-		return pageable == null ? 0 : pageable.getPageNumber();
+		return pageRequest == null ? 0 : pageRequest.getPageNumber();
 	}
 
 	/**
 	 * {@inheritDoc}}
 	 */
 	public int getSize() {
-		return pageable == null ? 0 : pageable.getPageSize();
+		return pageRequest == null ? 0 : pageRequest.getPageSize();
 	}	
 
 	/**
@@ -122,7 +122,7 @@ public class PageImpl<T> implements Page<T>, Serializable {
 	 * {@inheritDoc}}
 	 */
 	public Pageable nextPageable() {
-		return hasNext() ? pageable.next() : null;
+		return hasNext() ? pageRequest.next() : null;
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class PageImpl<T> implements Page<T>, Serializable {
 	public Pageable previousPageable() {
 
 		if (hasPrevious()) {
-			return pageable.previousOrFirst();
+			return pageRequest.previousOrFirst();
 		}
 
 		return null;
@@ -155,7 +155,7 @@ public class PageImpl<T> implements Page<T>, Serializable {
 	 * {@inheritDoc}}
 	 */
 	public Sort getSort() {
-		return pageable == null ? null : pageable.getSort();
+		return pageRequest == null ? null : pageRequest.getSort();
 	}
 
 	

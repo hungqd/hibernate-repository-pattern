@@ -14,7 +14,7 @@ import org.hibernate.criterion.Order;
  * 
  * @see org.hibernate.criterion.Order;
  */
-public class Sort implements Iterable<Order>, Sortable{
+public class Sort implements Sortable{
 	
 	public static final Direction DEFAULT_DIRECTION = Direction.ASC;
 	
